@@ -1,5 +1,6 @@
 package peaksoft.finalprojectrestapi.service;
 
+import peaksoft.finalprojectrestapi.dto.TeacherDto;
 import peaksoft.finalprojectrestapi.model.Response;
 import peaksoft.finalprojectrestapi.model.Student;
 import peaksoft.finalprojectrestapi.model.Teacher;
@@ -9,7 +10,7 @@ import java.util.UUID;
 
 public interface TeacherService {
 
-    Response saveTeacher(Teacher teacher);
+    Response saveTeacher(TeacherDto teacher);
 
     List<Teacher> getAllTeacher();
 
@@ -17,6 +18,6 @@ public interface TeacherService {
 
     Response deleteTeacherId(UUID id);
 
-    Response updateTeacherById(UUID id, Teacher teacher);
+    Response updateTeacherById(UUID id, TeacherDto teacher);
 
 }

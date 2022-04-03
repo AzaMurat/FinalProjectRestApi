@@ -2,6 +2,8 @@ package peaksoft.finalprojectrestapi.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import peaksoft.finalprojectrestapi.dto.StudentDto;
+import peaksoft.finalprojectrestapi.dto.maper.StudentMapper;
 import peaksoft.finalprojectrestapi.exception.BadRequestException;
 import peaksoft.finalprojectrestapi.exception.NotFountException;
 import peaksoft.finalprojectrestapi.model.Group;
@@ -23,10 +25,11 @@ import static org.springframework.http.HttpStatus.*;
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
+    private final StudentMapper studentMapper;
 
 
     @Override
-    public Response saveStudent(Student student) {
+    public Response saveStudent(StudentDto student) {
         String firstName = student.getFirstName();
         Optional<Student> byFirstName = studentRepository.findByStudentName(firstName);
 
@@ -35,7 +38,8 @@ public class StudentServiceImpl implements StudentService {
 
         }
 
-        Student saveStudent = studentRepository.save(student);
+        Student student1 = studentMapper.create(student);
+        Student saveStudent = studentRepository.save(student1);
 
         return Response.builder().httpStatus(CREATED).
                 message(String.format("Student with name = %s successfully registered",
@@ -65,7 +69,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Response updateStudentById(UUID id, Student newStudent) {
+    public Response updateStudentById(UUID id, StudentDto newStudent) {
         Student oldStudent = findByStudentId(id);
         String currentStudentName = oldStudent.getFirstName();
         String newStudentName = newStudent.getFirstName();

@@ -1,5 +1,6 @@
 package peaksoft.finalprojectrestapi.service;
 
+import peaksoft.finalprojectrestapi.dto.StudentDto;
 import peaksoft.finalprojectrestapi.model.Group;
 import peaksoft.finalprojectrestapi.model.Response;
 import peaksoft.finalprojectrestapi.model.Student;
@@ -10,7 +11,7 @@ import java.util.UUID;
 public interface StudentService {
 
 
-    Response saveStudent(Student student);
+    Response saveStudent(StudentDto student);
 
     List<Student> getAllStudent();
 
@@ -18,5 +19,5 @@ public interface StudentService {
 
     Response deleteStudentId(UUID id);
 
-    Response updateStudentById(UUID id, Student student);
+    Response updateStudentById(UUID id, StudentDto student);
 }

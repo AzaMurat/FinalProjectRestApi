@@ -2,6 +2,8 @@ package peaksoft.finalprojectrestapi.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import peaksoft.finalprojectrestapi.dto.TeacherDto;
+import peaksoft.finalprojectrestapi.dto.maper.TeacherMapper;
 import peaksoft.finalprojectrestapi.exception.BadRequestException;
 import peaksoft.finalprojectrestapi.exception.NotFountException;
 import peaksoft.finalprojectrestapi.model.Response;
@@ -21,9 +23,10 @@ import static org.springframework.http.HttpStatus.*;
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
+    private final TeacherMapper teacherMapper;
 
     @Override
-    public Response saveTeacher(Teacher teacher) {
+    public Response saveTeacher(TeacherDto teacher) {
         String firstName = teacher.getFirstName();
         Optional<Teacher> byFirstName = teacherRepository.findByTeacherName(firstName);
 
@@ -32,7 +35,8 @@ public class TeacherServiceImpl implements TeacherService {
 
         }
 
-        Teacher saveTeacher = teacherRepository.save(teacher);
+        Teacher teacher1 = teacherMapper.create(teacher);
+        Teacher saveTeacher = teacherRepository.save(teacher1);
 
         return Response.builder().httpStatus(CREATED).
                 message(String.format("Teacher with name = %s successfully registered",
@@ -63,7 +67,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Response updateTeacherById(UUID id, Teacher newTeacher) {
+    public Response updateTeacherById(UUID id, TeacherDto newTeacher) {
         Teacher oldTeacher = findByTeacherId(id);
         String currentFirstName = oldTeacher.getFirstName();
         String newFirstName = newTeacher.getFirstName();
@@ -71,7 +75,7 @@ public class TeacherServiceImpl implements TeacherService {
             oldTeacher.setFirstName(newFirstName);
         }
         String currentLastName = oldTeacher.getLastName();
-        String newLastName = newTeacher.getLastName();
+        String newLastName = newTeacher.getLastNAme();
         if (!Objects.equals(currentLastName, newLastName)) {
             oldTeacher.setLastName(newLastName);
         }

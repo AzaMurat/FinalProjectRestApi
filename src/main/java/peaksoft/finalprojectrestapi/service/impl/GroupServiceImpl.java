@@ -2,6 +2,8 @@ package peaksoft.finalprojectrestapi.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import peaksoft.finalprojectrestapi.dto.GroupDto;
+import peaksoft.finalprojectrestapi.dto.maper.GroupMapper;
 import peaksoft.finalprojectrestapi.exception.BadRequestException;
 import peaksoft.finalprojectrestapi.exception.NotFountException;
 import peaksoft.finalprojectrestapi.model.Course;
@@ -22,10 +24,11 @@ import static org.springframework.http.HttpStatus.*;
 public class GroupServiceImpl implements GroupService {
 
     private final GroupRepository groupRepository;
+    private final GroupMapper groupMapper;
 
 
     @Override
-    public Response saveGroup(Group group) {
+    public Response saveGroup(GroupDto group) {
         String groupName = group.getGroupName();
         Optional<Group> byGroupName = groupRepository.findByGroupName(groupName);
 
@@ -33,8 +36,8 @@ public class GroupServiceImpl implements GroupService {
             throw new BadRequestException("Group with cours name=" + groupName + "already exists");
 
         }
-
-        Group saveGroup = groupRepository.save(group);
+        Group group1 = groupMapper.creat(group);
+        Group saveGroup = groupRepository.save(group1);
 
         return Response.builder().httpStatus(CREATED).
                 message(String.format("Group with email = %s successfully registered",
@@ -65,7 +68,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Response updateGroupById(UUID id, Group newGroup) {
+    public Response updateGroupById(UUID id, GroupDto newGroup) {
         Group oldGroup = findByGroupId(id);
         String currentGroupName = oldGroup.getGroupName();
         String newGroupName = newGroup.getGroupName();

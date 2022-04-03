@@ -2,6 +2,7 @@ package peaksoft.finalprojectrestapi.api;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import peaksoft.finalprojectrestapi.dto.CourseDto;
 import peaksoft.finalprojectrestapi.exception.BadRequestException;
 import peaksoft.finalprojectrestapi.model.Course;
 import peaksoft.finalprojectrestapi.model.Response;
@@ -20,7 +21,7 @@ public class CourseApi {
     private final CourseService courseService;
 
     @PostMapping("/saveCourse")
-    public Response registerNewCourse(@RequestBody Course course) {
+    public Response registerNewCourse(@RequestBody CourseDto course) {
         return courseService.saveCourse(course);
     }
 
@@ -43,7 +44,7 @@ public class CourseApi {
     }
 
     @PutMapping("/updateCourse/{id}")
-    public Response updateCourseById(@PathVariable UUID id, Course course) {
+    public Response updateCourseById(@PathVariable UUID id, CourseDto course) {
         return courseService.updateCourseById(id, course);
     }
 }

@@ -1,6 +1,8 @@
 package peaksoft.finalprojectrestapi.service.impl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import peaksoft.finalprojectrestapi.dto.CompanyDto;
+import peaksoft.finalprojectrestapi.dto.maper.CompanyMapper;
 import peaksoft.finalprojectrestapi.exception.BadRequestException;
 import peaksoft.finalprojectrestapi.exception.NotFountException;
 import peaksoft.finalprojectrestapi.model.Company;
@@ -20,18 +22,18 @@ import static org.springframework.http.HttpStatus.*;
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
+    private final CompanyMapper mapper;
 
     @Override
-    public Response register(Company company) {
+    public Response register(CompanyDto company) {
         String email = company.getEmail();
         Optional<Company> byEmail = companyRepository.findByEmail(email);
 
         if (byEmail.isPresent()) {
             throw new BadRequestException("Company with email=" + email + "already exists");
         }
-
-        Company saveCompany =
-                companyRepository.save(company);
+        Company company1 = mapper.creaty(company);
+        Company saveCompany = companyRepository.save(company1);
 
         return Response.builder()
                 .httpStatus(CREATED)
@@ -63,7 +65,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Response updateCompanyById(UUID id, Company newCompany) {
+    public Response updateCompanyById(UUID id, CompanyDto newCompany) {
         Company oldCompany = findByCompanyId(id);
         String currentName = oldCompany.getCompanyName();
         String newCompanyName = newCompany.getCompanyName();

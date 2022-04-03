@@ -2,6 +2,8 @@ package peaksoft.finalprojectrestapi.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import peaksoft.finalprojectrestapi.dto.CourseDto;
+import peaksoft.finalprojectrestapi.dto.maper.CourseMapper;
 import peaksoft.finalprojectrestapi.exception.BadRequestException;
 import peaksoft.finalprojectrestapi.exception.NotFountException;
 import peaksoft.finalprojectrestapi.model.Course;
@@ -21,9 +23,10 @@ import static org.springframework.http.HttpStatus.*;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
+    private final CourseMapper courseMapper;
 
     @Override
-    public Response saveCourse(Course course) {
+    public Response saveCourse(CourseDto course) {
         String courseName = course.getCourseName();
         Optional<Course> byCourseName = courseRepository.findByCourseName(courseName);
 
@@ -32,7 +35,8 @@ public class CourseServiceImpl implements CourseService {
 
         }
 
-        Course saveCourse = courseRepository.save(course);
+        Course course1 = courseMapper.create(course);
+        Course saveCourse = courseRepository.save(course1);
 
         return Response.builder().httpStatus(CREATED).
                 message(String.format("Company with email = %s successfully registered",
@@ -63,7 +67,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Response updateCourseById(UUID id, Course newCourse) {
+    public Response updateCourseById(UUID id, CourseDto newCourse) {
         Course oldCourse = findByCourseId(id);
         String currentCourseName = oldCourse.getCourseName();
         String newCourseName = newCourse.getCourseName();

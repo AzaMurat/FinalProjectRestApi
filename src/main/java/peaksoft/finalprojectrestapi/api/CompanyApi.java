@@ -2,6 +2,7 @@ package peaksoft.finalprojectrestapi.api;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import peaksoft.finalprojectrestapi.dto.CompanyDto;
 import peaksoft.finalprojectrestapi.exception.BadRequestException;
 import peaksoft.finalprojectrestapi.model.Company;
 import peaksoft.finalprojectrestapi.model.Response;
@@ -20,7 +21,7 @@ public class CompanyApi {
     private final CompanyService companyService;
 
     @PostMapping("/registerCompany")
-    public Response registerNewCompany(@RequestBody Company company){
+    public Response registerNewCompany(@RequestBody CompanyDto company){
         return companyService.register(company);
     }
     @ExceptionHandler(BadRequestException.class)
@@ -39,7 +40,7 @@ public class CompanyApi {
         return companyService.deleteCompanyId(id);
     }
     @PutMapping("/updateCompany/{id}")
-    public Response updateCompanyById(@PathVariable UUID id, Company company){
+    public Response updateCompanyById(@PathVariable UUID id, CompanyDto company){
         return companyService.updateCompanyById(id,company);
     }
 }

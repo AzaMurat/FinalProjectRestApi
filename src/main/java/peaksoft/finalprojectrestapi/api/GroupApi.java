@@ -2,8 +2,8 @@ package peaksoft.finalprojectrestapi.api;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import peaksoft.finalprojectrestapi.dto.GroupDto;
 import peaksoft.finalprojectrestapi.exception.BadRequestException;
-import peaksoft.finalprojectrestapi.model.Course;
 import peaksoft.finalprojectrestapi.model.Group;
 import peaksoft.finalprojectrestapi.model.Response;
 import peaksoft.finalprojectrestapi.service.impl.GroupServiceImpl;
@@ -21,7 +21,7 @@ public class GroupApi {
     private final GroupServiceImpl groupService;
 
     @PostMapping("/saveGroup")
-    public Response saveNewGroup(@RequestBody Group group) {
+    public Response saveNewGroup(@RequestBody GroupDto group) {
         return groupService.saveGroup(group);
     }
 
@@ -42,7 +42,7 @@ public class GroupApi {
     }
 
     @PutMapping("/updateGroup/{id}")
-    public Response updateGroupById(@PathVariable UUID id, Group group) {
+    public Response updateGroupById(@PathVariable UUID id, GroupDto group) {
         return groupService.updateGroupById(id, group);
     }
 }

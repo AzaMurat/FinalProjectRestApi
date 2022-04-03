@@ -2,6 +2,7 @@ package peaksoft.finalprojectrestapi.api;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import peaksoft.finalprojectrestapi.dto.TeacherDto;
 import peaksoft.finalprojectrestapi.exception.BadRequestException;
 import peaksoft.finalprojectrestapi.model.Response;
 import peaksoft.finalprojectrestapi.model.Teacher;
@@ -20,7 +21,7 @@ public class TeacherApi {
     private final TeacherServiceImpl teacherService;
 
     @PostMapping("/saveTeachers")
-    public Response saveNewTeacher(@RequestBody Teacher teacher) {
+    public Response saveNewTeacher(@RequestBody TeacherDto teacher) {
         return teacherService.saveTeacher(teacher);
     }
 
@@ -41,7 +42,7 @@ public class TeacherApi {
     }
 
     @PutMapping("/updateTeacher/{id}")
-    public Response updateTeacherById(@PathVariable UUID id, Teacher teacher) {
+    public Response updateTeacherById(@PathVariable UUID id, TeacherDto teacher) {
         return teacherService.updateTeacherById(id, teacher);
     }
 }
