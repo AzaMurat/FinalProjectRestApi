@@ -1,7 +1,7 @@
 package peaksoft.finalprojectrestapi.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import javax.persistence.*;
-import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -20,7 +20,7 @@ public class Teacher {
             strategy = GenerationType.SEQUENCE,
             generator = "company_sequence"
     )
-    private UUID id;
+    private Long id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -29,6 +29,7 @@ public class Teacher {
     private String lastName;
 
     @OneToOne(cascade = {CascadeType.MERGE})
+    @JsonIgnore
     private Course course;
 
     public Teacher(String firstName, String lastName, Course course) {

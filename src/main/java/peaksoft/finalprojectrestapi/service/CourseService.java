@@ -4,17 +4,16 @@ import peaksoft.finalprojectrestapi.model.Course;
 import peaksoft.finalprojectrestapi.model.Response;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface CourseService {
 
-    Response saveCourse(CourseDto course);
+    Response saveCourse(CourseDto course,Long id);
 
     List<Course> getAllCourse();
 
-    Course findByCourseId(UUID id);
+    Course findByCourseId(Long id);
 
-    Response deleteCourseId(UUID id);
+    Response deleteCourseId(Long id);
 
-    Response updateCourseById(UUID id, CourseDto course);
+    Response updateCourseById(Long id, CourseDto course);
 }

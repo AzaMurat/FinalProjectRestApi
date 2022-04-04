@@ -1,11 +1,12 @@
 package peaksoft.finalprojectrestapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -23,7 +24,7 @@ public class Group {
             strategy = GenerationType.SEQUENCE,
             generator = "company_sequence"
     )
-    private UUID id;
+    private Long id;
 
     @Column(name = "group_name")
     private String groupName;
@@ -33,26 +34,34 @@ public class Group {
     private String dateOfFinish;
 
     @ManyToMany(cascade = CascadeType.MERGE)
+    @JsonIgnore
     private List<Course> courses;
 
     @OneToMany(mappedBy="group", fetch=FetchType.EAGER, cascade = CascadeType.REMOVE)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Student> students;
 
-    @ManyToOne
-    private Company company;
-
-    public Group(String groupName, String dateOfStart,String dateOfFinish, List<Course> courses, List<Student> students, Company company) {
+    public Group(String groupName, String dateOfStart,String dateOfFinish,
+                 List<Course> courses, List<Student> students) {
         this.groupName = groupName;
         this.dateOfStart = dateOfStart;
         this.dateOfFinish = dateOfFinish;
         this.courses = courses;
         this.students = students;
-        this.company = company;
     }
 
     @Override
     public String toString() {
         return groupName;
+    }
+
+    @JsonIgnore
+    public void setCourse(Course courseId){
+        if (courses == null){
+            courses = new ArrayList<>();
+        }
+        courses.add(courseId);
+        courseId.setGroup(this);
+
     }
 }

@@ -1,23 +1,21 @@
 package peaksoft.finalprojectrestapi.service.impl;
-
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import peaksoft.finalprojectrestapi.dto.StudentDto;
-import peaksoft.finalprojectrestapi.dto.maper.StudentMapper;
+import peaksoft.finalprojectrestapi.maper.StudentMapper;
 import peaksoft.finalprojectrestapi.exception.BadRequestException;
 import peaksoft.finalprojectrestapi.exception.NotFountException;
-import peaksoft.finalprojectrestapi.model.Group;
 import peaksoft.finalprojectrestapi.model.Response;
 import peaksoft.finalprojectrestapi.model.Student;
 import peaksoft.finalprojectrestapi.model.enums.StudyFormat;
 import peaksoft.finalprojectrestapi.repository.StudentRepository;
+import peaksoft.finalprojectrestapi.service.GroupService;
 import peaksoft.finalprojectrestapi.service.StudentService;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
-
 import static org.springframework.http.HttpStatus.*;
 
 @Service
@@ -26,10 +24,11 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
+    private final GroupService groupService;
 
 
     @Override
-    public Response saveStudent(StudentDto student) {
+    public Response saveStudent(StudentDto student, Long id) {
         String firstName = student.getFirstName();
         Optional<Student> byFirstName = studentRepository.findByStudentName(firstName);
 
@@ -39,6 +38,7 @@ public class StudentServiceImpl implements StudentService {
         }
 
         Student student1 = studentMapper.create(student);
+        student1.setGroup(groupService.findByGroupId(id));
         Student saveStudent = studentRepository.save(student1);
 
         return Response.builder().httpStatus(CREATED).
@@ -53,7 +53,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student findByStudentId(UUID id) {
+    public Student findByStudentId(Long id) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> {
                             throw new NotFountException("Student with id not found from data base");
@@ -63,13 +63,14 @@ public class StudentServiceImpl implements StudentService {
         return student;    }
 
     @Override
-    public Response deleteStudentId(UUID id) {
+    public Response deleteStudentId(Long id) {
         studentRepository.deleteById(id);
         return Response.builder().httpStatus(OK).build();
     }
 
+    @Transactional
     @Override
-    public Response updateStudentById(UUID id, StudentDto newStudent) {
+    public Response updateStudentById(Long id, StudentDto newStudent) {
         Student oldStudent = findByStudentId(id);
         String currentStudentName = oldStudent.getFirstName();
         String newStudentName = newStudent.getFirstName();

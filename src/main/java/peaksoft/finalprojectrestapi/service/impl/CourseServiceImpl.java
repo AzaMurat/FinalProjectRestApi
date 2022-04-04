@@ -3,18 +3,19 @@ package peaksoft.finalprojectrestapi.service.impl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import peaksoft.finalprojectrestapi.dto.CourseDto;
-import peaksoft.finalprojectrestapi.dto.maper.CourseMapper;
+import peaksoft.finalprojectrestapi.maper.CourseMapper;
 import peaksoft.finalprojectrestapi.exception.BadRequestException;
 import peaksoft.finalprojectrestapi.exception.NotFountException;
 import peaksoft.finalprojectrestapi.model.Course;
 import peaksoft.finalprojectrestapi.model.Response;
 import peaksoft.finalprojectrestapi.repository.CourseRepository;
+import peaksoft.finalprojectrestapi.service.CompanyService;
 import peaksoft.finalprojectrestapi.service.CourseService;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -24,22 +25,24 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
+    private final CompanyService companyService;
 
     @Override
-    public Response saveCourse(CourseDto course) {
-        String courseName = course.getCourseName();
-        Optional<Course> byCourseName = courseRepository.findByCourseName(courseName);
-
-        if (byCourseName.isPresent()) {
-            throw new BadRequestException("Course with cours name=" + courseName + "already exists");
-
-        }
+    public Response saveCourse(CourseDto course,Long id) {
+//        String courseName = course.getCourseName();
+//        Optional<Course> byCourseName = courseRepository.findByCourseName(courseName);
+//
+//        if (byCourseName.isPresent()) {
+//            throw new BadRequestException("Course with course name=" + courseName + "already exists");
+//
+//        }
 
         Course course1 = courseMapper.create(course);
+        course1.setCompany(companyService.findByCompanyId(id));
         Course saveCourse = courseRepository.save(course1);
 
         return Response.builder().httpStatus(CREATED).
-                message(String.format("Company with email = %s successfully registered",
+                message(String.format("Course with email = %s successfully registered",
                         saveCourse.getCourseName())).build();
     }
 
@@ -50,7 +53,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course findByCourseId(UUID id) {
+    public Course findByCourseId(Long id) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> {
                             throw new NotFountException("Course with id not found from data base");
@@ -61,13 +64,14 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Response deleteCourseId(UUID id) {
+    public Response deleteCourseId(Long id) {
         courseRepository.deleteById(id);
         return Response.builder().httpStatus(OK).build();
     }
 
+    @Transactional
     @Override
-    public Response updateCourseById(UUID id, CourseDto newCourse) {
+    public Response updateCourseById(Long id, CourseDto newCourse) {
         Course oldCourse = findByCourseId(id);
         String currentCourseName = oldCourse.getCourseName();
         String newCourseName = newCourse.getCourseName();

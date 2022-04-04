@@ -1,19 +1,21 @@
 package peaksoft.finalprojectrestapi.model;
+
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
 import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Getter @Setter
 @Table(name = "companies")
 public class Company {
+
     @Id
     @SequenceGenerator(
             name = "company_sequence",
@@ -24,7 +26,7 @@ public class Company {
             strategy = GenerationType.SEQUENCE,
             generator = "company_sequence"
     )
-    private UUID id;
+    private Long id;
 
     @Column(name ="company_name")
     private String companyName;
@@ -37,14 +39,6 @@ public class Company {
 
     @OneToMany(cascade = {PERSIST, MERGE, REMOVE}, mappedBy = "company")
     private List<Course> courses;
-
-    public Company(String companyName,String email, String locatedCountry,List<Course> courses) {
-        this.companyName = companyName;
-        this.email = email;
-        this.locatedCountry = locatedCountry;
-        this.courses = courses;
-    }
-
 
     @Override
     public String toString() {

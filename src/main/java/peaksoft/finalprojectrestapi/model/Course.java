@@ -1,10 +1,11 @@
 package peaksoft.finalprojectrestapi.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.EAGER;
@@ -25,7 +26,7 @@ public class Course {
             strategy = GenerationType.SEQUENCE,
             generator = "company_sequence"
     )
-    private UUID id;
+    private Long id;
 
     @Column(name = "course_name")
     private String courseName;
@@ -33,8 +34,8 @@ public class Course {
     @Column(name = "duration_in_month")
     private String durationInMonth;
 
-
     @ManyToOne
+    @JsonIgnore
     private Company company;
 
     @ManyToMany(fetch = EAGER,mappedBy = "courses", cascade = {PERSIST,MERGE, REMOVE} )
@@ -60,5 +61,13 @@ public class Course {
                 " company " + company +
                 " groups " + groups +
                 " teacher " + teacher;
+    }
+
+    @JsonIgnore
+    public void setGroup(Group group) {
+        if (groups == null) {
+            groups = new ArrayList<>();
+        }
+        groups.add(group);
     }
 }

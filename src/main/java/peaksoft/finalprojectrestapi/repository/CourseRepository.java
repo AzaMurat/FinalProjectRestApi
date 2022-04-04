@@ -7,10 +7,9 @@ import org.springframework.stereotype.Repository;
 import peaksoft.finalprojectrestapi.model.Course;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
-public interface CourseRepository extends JpaRepository <Course, UUID>{
+public interface CourseRepository extends JpaRepository <Course, Long>{
 
     @Query("select c from Course c where c.courseName = : name")
     Optional<Course> findByCourseName(@Param("name")String name);

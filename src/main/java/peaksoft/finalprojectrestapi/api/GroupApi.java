@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import peaksoft.finalprojectrestapi.dto.GroupDto;
 import peaksoft.finalprojectrestapi.exception.BadRequestException;
+import peaksoft.finalprojectrestapi.model.Company;
 import peaksoft.finalprojectrestapi.model.Group;
 import peaksoft.finalprojectrestapi.model.Response;
 import peaksoft.finalprojectrestapi.service.impl.GroupServiceImpl;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -20,9 +20,9 @@ public class GroupApi {
 
     private final GroupServiceImpl groupService;
 
-    @PostMapping("/saveGroup")
-    public Response saveNewGroup(@RequestBody GroupDto group) {
-        return groupService.saveGroup(group);
+    @PostMapping("/save/{courseId}")
+    public Response saveNewGroup(@RequestBody GroupDto group,@PathVariable("courseId") Long id) {
+        return groupService.saveGroup(group,id);
     }
 
     @ExceptionHandler(BadRequestException.class)
@@ -34,15 +34,24 @@ public class GroupApi {
     @GetMapping
     public List<Group> getAllGroup() {
         return groupService.getAllGroup();
+
     }
 
-    @DeleteMapping("/deleteGroup/{id}")
-    public Response deleteById(@PathVariable UUID id) {
+    @GetMapping("/getById/{id}")
+    public Group getByGroupId(@PathVariable Long id){
+        return groupService.findByGroupId(id);
+
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public Response deleteById(@PathVariable Long id) {
         return groupService.deleteGroupId(id);
+
     }
 
-    @PutMapping("/updateGroup/{id}")
-    public Response updateGroupById(@PathVariable UUID id, GroupDto group) {
+    @PutMapping("/update/{id}")
+    public Response updateGroupById(@PathVariable Long id, GroupDto group) {
         return groupService.updateGroupById(id, group);
+
     }
 }

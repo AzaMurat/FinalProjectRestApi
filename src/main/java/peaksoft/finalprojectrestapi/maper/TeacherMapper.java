@@ -1,4 +1,4 @@
-package peaksoft.finalprojectrestapi.dto.maper;
+package peaksoft.finalprojectrestapi.maper;
 
 import org.springframework.stereotype.Component;
 import peaksoft.finalprojectrestapi.dto.TeacherDto;

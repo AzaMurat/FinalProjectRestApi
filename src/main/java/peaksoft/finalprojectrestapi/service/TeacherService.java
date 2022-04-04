@@ -1,23 +1,19 @@
 package peaksoft.finalprojectrestapi.service;
-
 import peaksoft.finalprojectrestapi.dto.TeacherDto;
 import peaksoft.finalprojectrestapi.model.Response;
-import peaksoft.finalprojectrestapi.model.Student;
 import peaksoft.finalprojectrestapi.model.Teacher;
-
 import java.util.List;
-import java.util.UUID;
 
 public interface TeacherService {
 
-    Response saveTeacher(TeacherDto teacher);
+    Response saveTeacher(TeacherDto teacher, Long id);
 
     List<Teacher> getAllTeacher();
 
-    Teacher findByTeacherId(UUID id);
+    Teacher findByTeacherId(Long id);
 
-    Response deleteTeacherId(UUID id);
+    Response deleteTeacherId(Long id);
 
-    Response updateTeacherById(UUID id, TeacherDto teacher);
+    Response updateTeacherById(Long id, TeacherDto teacher);
 
 }

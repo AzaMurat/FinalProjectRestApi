@@ -1,22 +1,19 @@
 package peaksoft.finalprojectrestapi.service;
-
 import peaksoft.finalprojectrestapi.dto.GroupDto;
-import peaksoft.finalprojectrestapi.model.Course;
 import peaksoft.finalprojectrestapi.model.Group;
 import peaksoft.finalprojectrestapi.model.Response;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface GroupService {
 
-    Response saveGroup(GroupDto group);
+    Response saveGroup(GroupDto group,Long id);
 
     List<Group> getAllGroup();
 
-    Group findByGroupId(UUID id);
+    Group findByGroupId(Long id);
 
-    Response deleteGroupId(UUID id);
+    Response deleteGroupId(Long id);
 
-    Response updateGroupById(UUID id, GroupDto group);
+    Response updateGroupById(Long id, GroupDto group);
 }

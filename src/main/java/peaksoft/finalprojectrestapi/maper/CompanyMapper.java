@@ -1,4 +1,4 @@
-package peaksoft.finalprojectrestapi.dto.maper;
+package peaksoft.finalprojectrestapi.maper;
 
 import org.springframework.stereotype.Component;
 import peaksoft.finalprojectrestapi.dto.CompanyDto;
@@ -7,7 +7,7 @@ import peaksoft.finalprojectrestapi.model.Company;
 @Component
 public class CompanyMapper {
 
-    public Company creaty(CompanyDto companyDto){
+    public Company create(CompanyDto companyDto){
         if (companyDto==null){
             return null;
         }

@@ -1,13 +1,8 @@
 package peaksoft.finalprojectrestapi.model;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 import peaksoft.finalprojectrestapi.model.enums.StudyFormat;
-
 import javax.persistence.*;
-import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -25,7 +20,7 @@ public class Student {
             strategy = GenerationType.SEQUENCE,
             generator = "company_sequence"
     )
-    private UUID id;
+    private Long id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -36,6 +31,7 @@ public class Student {
     private StudyFormat studyFormat;
 
     @ManyToOne
+    @JsonIgnore
     private Group group;
 
     public Student(String firstName, String lastName, StudyFormat studyFormat, Group group) {

@@ -1,20 +1,20 @@
 package peaksoft.finalprojectrestapi.service.impl;
-
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import peaksoft.finalprojectrestapi.dto.TeacherDto;
-import peaksoft.finalprojectrestapi.dto.maper.TeacherMapper;
+import peaksoft.finalprojectrestapi.maper.TeacherMapper;
 import peaksoft.finalprojectrestapi.exception.BadRequestException;
 import peaksoft.finalprojectrestapi.exception.NotFountException;
 import peaksoft.finalprojectrestapi.model.Response;
 import peaksoft.finalprojectrestapi.model.Teacher;
 import peaksoft.finalprojectrestapi.repository.TeacherRepository;
+import peaksoft.finalprojectrestapi.service.CourseService;
 import peaksoft.finalprojectrestapi.service.TeacherService;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -24,9 +24,10 @@ public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
     private final TeacherMapper teacherMapper;
+    private final CourseService courseService;
 
     @Override
-    public Response saveTeacher(TeacherDto teacher) {
+    public Response saveTeacher(TeacherDto teacher,Long id) {
         String firstName = teacher.getFirstName();
         Optional<Teacher> byFirstName = teacherRepository.findByTeacherName(firstName);
 
@@ -36,6 +37,7 @@ public class TeacherServiceImpl implements TeacherService {
         }
 
         Teacher teacher1 = teacherMapper.create(teacher);
+        teacher1.setCourse(courseService.findByCourseId(id));
         Teacher saveTeacher = teacherRepository.save(teacher1);
 
         return Response.builder().httpStatus(CREATED).
@@ -50,7 +52,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Teacher findByTeacherId(UUID id) {
+    public Teacher findByTeacherId(Long id) {
         Teacher teacher = teacherRepository.findById(id)
                 .orElseThrow(() -> {
                             throw new NotFountException("Teacher with id not found from data base");
@@ -61,13 +63,14 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Response deleteTeacherId(UUID id) {
+    public Response deleteTeacherId(Long id) {
         teacherRepository.deleteById(id);
         return Response.builder().httpStatus(OK).build();
     }
 
+    @Transactional
     @Override
-    public Response updateTeacherById(UUID id, TeacherDto newTeacher) {
+    public Response updateTeacherById(Long id, TeacherDto newTeacher) {
         Teacher oldTeacher = findByTeacherId(id);
         String currentFirstName = oldTeacher.getFirstName();
         String newFirstName = newTeacher.getFirstName();

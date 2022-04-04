@@ -7,10 +7,9 @@ import org.springframework.stereotype.Repository;
 import peaksoft.finalprojectrestapi.model.Student;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
-public interface StudentRepository extends JpaRepository<Student, UUID> {
+public interface StudentRepository extends JpaRepository<Student, Long> {
 
     @Query("select s from Student s where s.firstName = : name")
     Optional<Student> findByStudentName(@Param("name") String name);
