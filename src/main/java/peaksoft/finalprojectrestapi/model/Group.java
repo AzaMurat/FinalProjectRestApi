@@ -16,13 +16,13 @@ public class Group {
 
     @Id
     @SequenceGenerator(
-            name = "company_sequence",
-            sequenceName = "company_sequence",
+            name = "group_sequence",
+            sequenceName = "group_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "company_sequence"
+            generator = "group_sequence"
     )
     private Long id;
 

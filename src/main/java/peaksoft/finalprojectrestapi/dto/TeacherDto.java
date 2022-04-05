@@ -15,4 +15,6 @@ public class TeacherDto {
 
     private String lastNAme;
 
+    private String email;
+
 }

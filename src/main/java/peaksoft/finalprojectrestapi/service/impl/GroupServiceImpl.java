@@ -15,7 +15,6 @@ import peaksoft.finalprojectrestapi.service.GroupService;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -31,19 +30,20 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public Response saveGroup(GroupDto group,Long id) {
         String groupName = group.getGroupName();
-        Optional<Group> byGroupName = groupRepository.findByGroupName(groupName);
-
-        if (byGroupName.isPresent()) {
-            throw new BadRequestException("Group with cours name=" + groupName + "already exists");
-
-        }
-        Group group1 = groupMapper.creat(group);
-        group1.setCourse(courseService.findByCourseId(id));
-        Group saveGroup = groupRepository.save(group1);
+        checkCourseName(groupName);
+        Group groups = groupMapper.creat(group);
+        groups.setCourse(courseService.findByCourseId(id));
+        Group saveGroups = groupRepository.save(groups);
 
         return Response.builder().httpStatus(CREATED).
                 message(String.format("Group with email = %s successfully registered",
-                        saveGroup.getGroupName())).build();
+                        saveGroups.getGroupName())).build();
+    }
+    private void checkCourseName(String groupName) {
+        boolean exists = groupRepository.existsByName(groupName);
+        if (exists) {
+            throw new BadRequestException("Course with course name" + groupName + "already exists");
+        }
     }
 
     @Override

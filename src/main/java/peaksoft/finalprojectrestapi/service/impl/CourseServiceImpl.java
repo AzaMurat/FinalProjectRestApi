@@ -15,7 +15,6 @@ import peaksoft.finalprojectrestapi.service.CourseService;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -29,14 +28,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Response saveCourse(CourseDto course,Long id) {
-//        String courseName = course.getCourseName();
-//        Optional<Course> byCourseName = courseRepository.findByCourseName(courseName);
-//
-//        if (byCourseName.isPresent()) {
-//            throw new BadRequestException("Course with course name=" + courseName + "already exists");
-//
-//        }
-
+        String courseName = course.getCourseName();
+        checkCourseName(courseName);
         Course course1 = courseMapper.create(course);
         course1.setCompany(companyService.findByCompanyId(id));
         Course saveCourse = courseRepository.save(course1);
@@ -44,6 +37,12 @@ public class CourseServiceImpl implements CourseService {
         return Response.builder().httpStatus(CREATED).
                 message(String.format("Course with email = %s successfully registered",
                         saveCourse.getCourseName())).build();
+    }
+    private void checkCourseName(String courseName){
+        boolean exists= courseRepository.existsByName(courseName);
+        if (exists){
+            throw new BadRequestException("Course with course name"+courseName+"already exists");
+        }
     }
 
     @Override
@@ -66,7 +65,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Response deleteCourseId(Long id) {
         courseRepository.deleteById(id);
-        return Response.builder().httpStatus(OK).build();
+        return Response.builder().httpStatus(OK).message("Course with id successfully deleted").build();
     }
 
     @Transactional

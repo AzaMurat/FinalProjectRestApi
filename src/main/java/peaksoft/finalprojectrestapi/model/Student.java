@@ -3,6 +3,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import peaksoft.finalprojectrestapi.model.enums.StudyFormat;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 @Entity
 @NoArgsConstructor
@@ -12,13 +13,13 @@ public class Student {
 
     @Id
     @SequenceGenerator(
-            name = "company_sequence",
-            sequenceName = "company_sequence",
+            name = "student_sequence",
+            sequenceName = "student_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "company_sequence"
+            generator = "student_sequence"
     )
     private Long id;
 
@@ -27,6 +28,9 @@ public class Student {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @Email
+    private String email;
 
     private StudyFormat studyFormat;
 

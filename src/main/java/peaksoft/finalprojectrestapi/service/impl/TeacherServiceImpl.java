@@ -6,6 +6,7 @@ import peaksoft.finalprojectrestapi.maper.TeacherMapper;
 import peaksoft.finalprojectrestapi.exception.BadRequestException;
 import peaksoft.finalprojectrestapi.exception.NotFountException;
 import peaksoft.finalprojectrestapi.model.Response;
+import peaksoft.finalprojectrestapi.model.Student;
 import peaksoft.finalprojectrestapi.model.Teacher;
 import peaksoft.finalprojectrestapi.repository.TeacherRepository;
 import peaksoft.finalprojectrestapi.service.CourseService;
@@ -28,12 +29,12 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Response saveTeacher(TeacherDto teacher,Long id) {
-        String firstName = teacher.getFirstName();
-        Optional<Teacher> byFirstName = teacherRepository.findByTeacherName(firstName);
+        String email = teacher.getEmail();
+        Optional<Teacher> teacherOptional = teacherRepository.findByEmail(email);
 
-        if (byFirstName.isPresent()) {
-            throw new BadRequestException("Teacher with teacher name=" + firstName + "already exists");
-
+        if (teacherOptional.isPresent()){
+            throw new BadRequestException(
+                    String.format("Teacher with Email = %s already exists",email));
         }
 
         Teacher teacher1 = teacherMapper.create(teacher);

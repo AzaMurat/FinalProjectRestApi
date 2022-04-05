@@ -29,14 +29,13 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Response saveStudent(StudentDto student, Long id) {
-        String firstName = student.getFirstName();
-        Optional<Student> byFirstName = studentRepository.findByStudentName(firstName);
+        String email = student.getEmail();
+        Optional<Student> studentOptional = studentRepository.findByEmail(email);
 
-        if (byFirstName.isPresent()) {
-            throw new BadRequestException("Student with student name=" + firstName + "already exists");
-
+        if (studentOptional.isPresent()){
+            throw new BadRequestException(
+                    String.format("Student with Email = %s already exists",email));
         }
-
         Student student1 = studentMapper.create(student);
         student1.setGroup(groupService.findByGroupId(id));
         Student saveStudent = studentRepository.save(student1);

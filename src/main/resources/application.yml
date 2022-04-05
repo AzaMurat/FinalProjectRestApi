@@ -6,7 +6,8 @@ spring:
     password: 405
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
-
+    server:
+      port: 7575
