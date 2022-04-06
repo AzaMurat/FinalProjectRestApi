@@ -42,8 +42,8 @@ public class TeacherServiceImpl implements TeacherService {
         Teacher saveTeacher = teacherRepository.save(teacher1);
 
         return Response.builder().httpStatus(CREATED).
-                message(String.format("Teacher with name = %s successfully registered",
-                        saveTeacher.getFirstName())).build();
+                message(String.format("Teacher with email = %s successfully registered",
+                        saveTeacher.getEmail())).build();
     }
 
     @Override

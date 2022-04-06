@@ -36,13 +36,13 @@ public class GroupServiceImpl implements GroupService {
         Group saveGroups = groupRepository.save(groups);
 
         return Response.builder().httpStatus(CREATED).
-                message(String.format("Group with email = %s successfully registered",
+                message(String.format("Group with name = %s successfully registered",
                         saveGroups.getGroupName())).build();
     }
     private void checkCourseName(String groupName) {
         boolean exists = groupRepository.existsByName(groupName);
         if (exists) {
-            throw new BadRequestException("Course with course name" + groupName + "already exists");
+            throw new BadRequestException("Group with name" + groupName + "already exists");
         }
     }
 

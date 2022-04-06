@@ -41,8 +41,8 @@ public class StudentServiceImpl implements StudentService {
         Student saveStudent = studentRepository.save(student1);
 
         return Response.builder().httpStatus(CREATED).
-                message(String.format("Student with name = %s successfully registered",
-                        saveStudent.getFirstName())).build();
+                message(String.format("Student with email = %s successfully registered",
+                        saveStudent.getEmail())).build();
     }
 
     @Override

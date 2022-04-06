@@ -16,5 +16,6 @@ public class StudentDto {
     private String lastName;
 
     private String email;
+
     private StudyFormat studyFormat;
 }
